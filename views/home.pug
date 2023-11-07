@@ -1,0 +1,63 @@
+doctype html
+html(lang='en')
+  head
+    script(type='text/javascript').
+      
+      let views = 0;
+      if (sessionStorage.getItem("visit") === null) {
+      updateCounter("type=visit-pageview")
+      .then((data) => {
+      views = data.pageviews;
+      const pageviewsCount = document.getElementById('pageviews-count');
+      if (pageviewsCount) {
+      pageviewsCount.textContent = views; // Display pageviews to the user
+      }
+      sessionStorage.setItem("visit", "x");
+      })
+      .catch((error) => {
+      console.error('Error:', error);
+      });
+      } else {
+      updateCounter("type=pageview")
+      .then((data) => {
+      views = data.pageviews;
+      const pageviewsCount = document.getElementById('pageviews-count');
+      if (pageviewsCount) {
+      pageviewsCount.textContent = views; // Display pageviews to the user
+      }
+      })
+      .catch((error) => {
+      console.error('Error:', error);
+      });
+      }
+      function updateCounter(type) {
+      return fetch('http://localhost:3000/api?'+type)
+      .then((res) => res.json());
+      }
+    
+    script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='public/css/main.css')
+    title Animated Dropdown Menu
+  body.subpage
+    .content
+      .menu
+        div
+          a#home.homeLink(href='/') Home
+        .dropdown
+          a.services Services
+          .dropdown-content.hidden(style='display: none;')
+            a.service(href='/service1', onclick='hidemenu()') Service 1
+            a.service(href='/service2', onclick='hidemenu()') Service 2
+            a.service(href='/service3', onclick='hidemenu()') Service 3
+        div
+          a.about(href='#') About
+        div
+          a.contact(href='#') Contact
+    .main
+      .mainContent
+        #pageviews-count(style='color: white;')  
+        #visits-count
+      img.code(src='https://cdn.glitch.global/79f4bbec-285c-4a73-90c3-8d4725ed1def/code1.jpeg?v=1699107700829')
+    script(src='public/dropdown.js')
